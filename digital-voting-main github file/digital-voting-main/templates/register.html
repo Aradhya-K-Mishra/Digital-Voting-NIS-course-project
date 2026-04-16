@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <div class="hero-box">
+        <h2 style="margin-bottom: 2rem;">Register Account</h2>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alerts-container">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+        <div class="form-group">
+            <label for="f_name">First Name</label>
+            <input type="text" id="f_name" name="f_name" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="l_name">Last Name</label>
+            <input type="text" id="l_name" name="l_name" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="employee_id">Employee ID</label>
+            <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="e.g. 1234" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="confirm_pass">Confirm Password</label>
+            <input type="password" id="confirm_pass" name="confirm_pass" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+            Already have an account? <a href="{{ url_for('login') }}">Sign In</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

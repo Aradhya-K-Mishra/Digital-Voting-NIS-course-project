@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <div class="hero-box">
+        <h2 style="margin-bottom: 2rem;">Login to Your Account</h2>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alerts-container">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+        <div class="form-group">
+            <label for="employee_id">Employee ID</label>
+            <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="e.g. 1234" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+            Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

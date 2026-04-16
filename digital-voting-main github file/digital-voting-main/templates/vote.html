@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card glass-card-large">
+    <div class="hero-box" style="text-align: left;">
+        <h2 style="margin-bottom: 1rem; color: var(--text-main);">Official Digital Ballot</h2>
+        <p style="margin-bottom: 2rem;">Please review the candidates below carefully. Your votes are cryptographically signed and encrypted upon submission.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alerts-container">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('vote') }}">
+        {% for position, candidates in positions.items() %}
+        <div class="ballot-section">
+            <h3 class="ballot-title">{{ position|upper }}</h3>
+            <div class="candidate-list">
+                {% for cand in candidates %}
+                <label class="candidate-option">
+                    <input type="radio" name="position_{{ position }}" value="{{ cand.id }}" required>
+                    <span class="candidate-info">{{ cand.first_name }} {{ cand.last_name }}</span>
+                </label>
+                {% endfor %}
+                <label class="candidate-option" style="background: rgba(225, 29, 72, 0.1);">
+                    <input type="radio" name="position_{{ position }}" value="0" required>
+                    <span class="candidate-info" style="color: #fda4af;">Abstain (Do not vote for this position)</span>
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 1rem;">Sign and Encrypt Ballot</button>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">
+                By securely submitting, your vote is authenticated and placed into the counter's encrypted queue.
+            </p>
+        </div>
+    </form>
+</div>
+{% endblock %}

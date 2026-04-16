@@ -1,0 +1,114 @@
+basically have a cryptography-based digital voting system with 3 actors:
+
+1. Voter (mainScreen) — casts vote
+
+2.Authenticator — checks eligibility (has user voted?)
+
+3. Vote Counter — decrypts + counts votes
+
+
+
+User votes → Encrypt → Authenticator verifies → Signs → Counter decrypts → Count
+
+
+
+
+Step 1 — Registration
+
+->registration.py
+
+->User sets password.
+
+->Password stored hashed in MySQL.
+
+Just normal account setup.
+
+Step 2 — Login
+
+->login.py
+
+->User enters ID + password.
+
+->Password hashed → compared with DB.
+
+->Returns employee ID.
+
+
+
+Step 3 — Voting UI
+
+->mainscreen.py
+
+This is where the action starts.
+
+What happens:
+
+Fetch candidates from DB.
+
+User selects votes.
+
+Votes stored in list.
+
+Votes encrypted using counter public key.
+
+User ID attached.
+
+Whole message encrypted using authenticator public key.
+
+
+
+
+Encryption Chain:
+
+Vote → encrypted for Counter
+↓
+Wrapped with ID
+↓
+Encrypted for Authenticator
+
+
+So:
+
+Authenticator sees ID
+
+Cannot see vote content
+
+Counter sees vote
+
+Cannot see voter identity
+
+This is the PRIVACY DESIGN 
+
+
+
+Authenticator.py 
+
+This file does eligibility checking.
+
+authenticate()
+
+What happens:
+
+Reads encrypted ballot file.
+
+Decrypts using authenticator private key.
+
+
+
+Architecture:
+
+User
+ ↓
+Login
+ ↓
+Vote UI
+ ↓
+Encrypted ballot → Authenticator
+                       ↓
+               Verify eligibility
+                       ↓
+              Sign + forward
+                       ↓
+                Vote Counter
+                       ↓
+                  Update DB
